@@ -1,0 +1,134 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int id;
+    Node *prev;
+	Node  *next;
+};
+
+Node* head = NULL;
+Node* tail = NULL;
+
+void insert_beginning(int x) 
+{
+    cout << "insertion in the beginning " << x << endl;
+    Node* p = new Node;
+    p->id = x;
+    p->prev = NULL;
+    p->next = head;
+
+    if(head == NULL) 
+	 {
+        head = tail = p;
+    } else {
+        head->prev = p;
+        head = p;
+    }
+}
+
+void insert_end(int x) {
+    cout << "inserting at end  " << x << endl;
+    Node* p = new Node;
+    p->id = x;
+    p->next = NULL;
+    p->prev = tail;
+
+    if(tail == NULL) 
+	{
+        head = tail =p;
+    } else {
+        tail->next =p;
+        tail =p;
+    }
+}
+
+void insert_at_position(int x, int pos) {
+    cout<< "inserting " << x <<" at position " <<pos << endl;
+
+    if(pos<= 1 || head ==  NULL) 
+	{
+        insert_beginning(x);
+        return;
+    }
+
+    Node* t = head;
+    int index = 1;
+
+      while(index< pos- 1 && t->next != NULL) {
+        t = t->next;
+        index++;
+    }
+
+    if(t->next == NULL)
+	 {
+        insert_end(x);
+        return;
+    }
+
+    Node* p =  new Node;
+    p->id  = x;
+    p->next = t->next;
+    p->prev = t;
+    t->next->prev = p;
+    t->next = p;
+}
+ void deleteFrom_start() 
+{
+    cout<< "deleting from beginning  " << endl;
+
+    if(head == NULL)
+	 {
+        cout<< "list is empty   \n";
+        return;
+    }
+
+    Node* temp = head;
+
+    if(head == tail) 
+	{
+        head = tail = NULL;
+    } else {
+        head = head->next;
+        head->prev = NULL;
+    }
+
+    cout<< "deleted: "<< temp->id << endl;
+    delete temp;
+}
+
+void show() {
+    Node* curr = head;
+
+    cout <<"current List ";
+    if(curr == NULL) {
+        cout<< "empty   \n";
+        return;
+    }
+
+    while(curr !=  NULL) {
+        cout<< curr->id << " ";
+        curr = curr->next;
+    }
+    cout<< endl;
+}
+
+int main() {
+    insert_beginning(10);
+    show();
+    insert_end(20);
+    show();
+    insert_end(30);
+    show();
+    insert_at_position(15, 2);
+    show();
+    insert_at_position(5, 1);
+    show();
+    insert_at_position(50, 20);
+    show();
+    deleteFrom_start();
+    show();
+
+
+    return 0;
+}
